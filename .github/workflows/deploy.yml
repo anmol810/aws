@@ -26,4 +26,8 @@ jobs:
             docker stop site || true
             docker rm site || true
 
-            docker run -d -p 80:80 --name site my-site
+            docker run -d \
+                    --restart unless-stopped \
+                    -p 80:80 \
+                    --name site \
+                    my-site
