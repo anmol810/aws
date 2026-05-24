@@ -30,6 +30,6 @@ jobs:
 
             docker run -d \
               --restart unless-stopped \
-              -p 8000:8000 \
+              -p 8000:80 \
               --name site \
               my-site
