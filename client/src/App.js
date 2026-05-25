@@ -20,7 +20,7 @@ export default function App() {
         setLoading(false);
       })
       .catch(() => {
-        setError("Could f4yfv4ufh4uvfy4fuhu connect to server");
+        setError("Could not connect to server");
         setLoading(false);
       });
   }, []);
