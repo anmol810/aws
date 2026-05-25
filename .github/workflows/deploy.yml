@@ -1,35 +1,32 @@
 name: Deploy to EC2
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+- main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+deploy:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+```
+steps:
+  - name: Deploy via SSH
+    uses: appleboy/ssh-action@v1.0.3
 
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_KEY }}
+    with:
+      host: ${{ secrets.EC2_HOST }}
+      username: ec2-user
+      key: ${{ secrets.EC2_KEY }}
 
-          script: |
-            cd ~/app/aws
+      script: |
+        cd ~/aws
 
-            git pull origin main
+        git reset --hard HEAD
 
-            docker build -t my-site .
+        git pull origin main
 
-            docker stop site || true
-            docker rm site || true
+        DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker-compose down
 
-            docker run -d \
-              --restart unless-stopped \
-              -p 8000:80 \
-              --name site \
-              my-site
+        DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker-compose up -d --build
+```
