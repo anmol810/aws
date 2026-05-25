@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./server
+    container_name: todo-backend
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./server/.env
+    networks:
+      - todo-network
+
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    container_name: todo-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - todo-network
+
+networks:
+  todo-network:
+    driver: bridge
